@@ -467,7 +467,7 @@ namespace gp\tool{
 			global $page, $gpLayouts, $gpOutConf;
 
 			$outSet = false;
-			$outKeys = false;
+			$outKeys = [];
 
 			$layout_info =& $gpLayouts[$page->gpLayout];
 
@@ -846,7 +846,7 @@ namespace gp\tool{
 
 			if( !empty($info['method']) ){
 				if( method_exists($object, $info['method']) ){
-					$args[0] = call_user_func_array([$object, $info['method']], $args);
+					$args[0] = call_user_func_array([$object, $info['method']], array_values($args));
 				}elseif( $has_script ){
 					self::ExecError(\CMS_NAME . ' Error: Addon hook method doesn\'t exist (1).', $info, 'method');
 				}
@@ -876,7 +876,7 @@ namespace gp\tool{
 			}
 
 			if( is_callable($callback) ){
-				$args[0] = call_user_func_array($callback, $args);
+				$args[0] = call_user_func_array($callback, array_values($args));
 			}elseif( $has_script ){
 				self::ExecError(\CMS_NAME.' Error: Addon hook method doesn\'t exist (2).', $info, 'method');
 			}
@@ -1273,7 +1273,7 @@ namespace gp\tool{
 					$edit_index,
 					'Admin_Theme_Content/Text',
 					$langmessage['edit'],
-					'cmd=EditText&key=' . urlencode($text) . '&return=' . urlencode($page->title),
+					'cmd=EditText&key=' . urlencode((string)$text) . '&return=' . urlencode((string)$page->title),
 					['title' => htmlspecialchars($text), 'data-cmd'	=> 'gpabox']
 				);
 				echo '<div class="editable_area inner_size" id="ExtraEditArea' . $edit_index . '">';
@@ -1609,8 +1609,8 @@ namespace gp\tool{
 				$keywords = explode(',', $page->TitleInfo['keywords']);
 			}
 
-			$keywords[]		= strip_tags($page_title);
-			$keywords[]		= strip_tags($page->label);
+			$keywords[]		= strip_tags((string)$page_title);
+			$keywords[]		= strip_tags((string)$page->label);
 
 			$site_keywords	= explode(',', $config['keywords']);
 			$keywords		= array_merge($keywords, $site_keywords);

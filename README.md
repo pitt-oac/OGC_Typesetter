@@ -13,7 +13,7 @@
 
 
 ## Requirements ##
-* PHP 5.6+ as of Typesetter 5.1.1-b1
+* PHP 7.4+, including PHP 8.x (verified on PHP 8.4)
 
 
 ## Installation ##

@@ -329,7 +329,7 @@ class Compiler
         // Otherwise, the CSS will be rendered as-is. It can even be extended!
         $cssOnly = false;
 
-        if (substr($path, '-4') === '.css') {
+        if (substr((string) $path, -4) === '.css') {
             $cssOnly = true;
         }
 
@@ -3177,14 +3177,14 @@ class Compiler
                 // 1. op[op name][left type][right type]
                 // 2. op[left type][right type] (passing the op as first arg
                 // 3. op[op name]
-                $fn = "op${ucOpName}${ucLType}${ucRType}";
+                $fn = "op{$ucOpName}{$ucLType}{$ucRType}";
 
                 if (
                     \is_callable([$this, $fn]) ||
-                    (($fn = "op${ucLType}${ucRType}") &&
+                    (($fn = "op{$ucLType}{$ucRType}") &&
                         \is_callable([$this, $fn]) &&
                         $passOp = true) ||
-                    (($fn = "op${ucOpName}") &&
+                    (($fn = "op{$ucOpName}") &&
                         \is_callable([$this, $fn]) &&
                         $genOp = true)
                 ) {
@@ -4484,7 +4484,7 @@ class Compiler
      *
      * @return array
      */
-    protected function multiplyMedia(Environment $env = null, $childQueries = null)
+    protected function multiplyMedia(?Environment $env = null, $childQueries = null)
     {
         if (
             ! isset($env) ||
@@ -4570,7 +4570,7 @@ class Compiler
      *
      * @return \ScssPhp\ScssPhp\Compiler\Environment
      */
-    protected function pushEnv(Block $block = null)
+    protected function pushEnv(?Block $block = null)
     {
         $env = new Environment();
         $env->parent = $this->env;
@@ -4628,7 +4628,7 @@ class Compiler
      * @param \ScssPhp\ScssPhp\Compiler\Environment $env
      * @param mixed                                 $valueUnreduced
      */
-    protected function set($name, $value, $shadow = false, Environment $env = null, $valueUnreduced = null)
+    protected function set($name, $value, $shadow = false, ?Environment $env = null, $valueUnreduced = null)
     {
         $name = $this->normalizeName($name);
 
@@ -4730,7 +4730,7 @@ class Compiler
      *
      * @return mixed|null
      */
-    public function get($name, $shouldThrow = true, Environment $env = null, $unreduced = false)
+    public function get($name, $shouldThrow = true, ?Environment $env = null, $unreduced = false)
     {
         $normalizedName = $this->normalizeName($name);
         $specialContentKey = static::$namespaces['special'] . 'content';
@@ -4795,7 +4795,7 @@ class Compiler
      *
      * @return boolean
      */
-    protected function has($name, Environment $env = null)
+    protected function has($name, ?Environment $env = null)
     {
         return ! \is_null($this->get($name, false, $env));
     }

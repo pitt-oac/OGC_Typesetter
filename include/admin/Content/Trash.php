@@ -143,7 +143,7 @@ class Trash extends \gp\special\Base{
 			}
 		}
 
-		uasort($trash_titles,array('self','TitleSort'));
+		uasort($trash_titles,array(__CLASS__,'TitleSort'));
 
 		return $trash_titles;
 	}

@@ -45,7 +45,7 @@ class gptest_bootstrap extends \PHPUnit_Framework_TestCase{
 		fwrite($fp, "\n".print_r($msg, TRUE));
 	}
 
-	public function setUp(){
+	public function setUp(): void{
 		self::UseAdmin();
 	}
 
@@ -54,7 +54,7 @@ class gptest_bootstrap extends \PHPUnit_Framework_TestCase{
 	 * https://medium.com/@peter.lafferty/start-phps-built-in-web-server-from-phpunit-9571f38c5045
 	 *
 	 */
-	public static function setUpBeforeClass(){
+	public static function setUpBeforeClass(): void{
 
 		if( function_exists('showError') ){
 			return;

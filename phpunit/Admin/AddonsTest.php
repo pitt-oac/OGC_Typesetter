@@ -6,7 +6,7 @@ class AddonsTest extends \gptest_bootstrap{
 
 	private $admin_addons;
 
-	public function setUp(){
+	public function setUp(): void{
 		parent::setUp();
 
 		$this->admin_addons = new \gp\admin\Addons([]);

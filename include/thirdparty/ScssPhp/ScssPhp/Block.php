@@ -17,6 +17,7 @@ namespace ScssPhp\ScssPhp;
  *
  * @author Anthon Pang <anthon.pang@gmail.com>
  */
+#[\AllowDynamicProperties]
 class Block
 {
     /**

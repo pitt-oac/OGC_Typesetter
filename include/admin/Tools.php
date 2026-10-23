@@ -672,7 +672,7 @@ namespace gp\admin{
 
 				if( is_numeric($label) ){
 					if( is_array($link) ){
-						echo call_user_func_array(['\\gp\\tool', 'Link'], $link); /* preferred */
+						echo call_user_func_array(['\\gp\\tool', 'Link'], array_values($link)); /* preferred */
 					}else{
 						echo $link; //just a text label
 					}

@@ -6,7 +6,7 @@ class ExtraTest extends \gptest_bootstrap{
 
 	private $admin_extra;
 
-	public function setUp(){
+	public function setUp(): void{
 		parent::setUp();
 
 		$this->admin_extra = new \gp\admin\Content\Extra([]);
@@ -56,7 +56,7 @@ class ExtraTest extends \gptest_bootstrap{
 			'verified'		=> \gp\tool\Nonce::Create('post', true),
 		];
 		$this->PostRequest('Admin/Extra/Footer',$params);
-		$this->assertFileNotExists($area_info['draft_path']);
+		$this->assertFileDoesNotExist($area_info['draft_path']);
 
 		// make sure the new text still shows
 		$response	= $this->GetRequest('Admin/Extra/Footer','cmd=PreviewText');

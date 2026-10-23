@@ -7,7 +7,7 @@ class HighlighterSettings{
 	var $themes = array();
 	var $config = array();
 
-	function HighlighterSettings(){
+	function __construct(){
 
 		$this->config = gpPlugin::GetConfig();
 		$this->config += array('theme'=>'default');

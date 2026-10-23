@@ -233,11 +233,11 @@ class Installer{
 		$version		= phpversion();
 		$can_install	= 2;
 
-		if( version_compare($version,'5.6','<') ){
+		if( version_compare($version,'7.4','<') ){
 			$can_install		= -1;
 		}
 
-		$this->SetStatus($langmessage['PHP_Version'], $can_install, $version, '5.6+');
+		$this->SetStatus($langmessage['PHP_Version'], $can_install, $version, '7.4+');
 	}
 
 

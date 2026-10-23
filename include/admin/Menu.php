@@ -172,7 +172,7 @@ class Menu extends \gp\special\Base{
 		$gp_menu_collapse =& $_COOKIE['gp_menu_hide'];
 
 		$search = '#' . $this->curr_menu_id . '=[';
-		$pos = strpos($gp_menu_collapse, $search);
+		$pos = strpos((string)$gp_menu_collapse, $search);
 		if( $pos === false ){
 			return;
 		}
@@ -287,7 +287,7 @@ class Menu extends \gp\special\Base{
 		echo '<form action="' . \gp\tool::GetUrl('Admin/Menu') . '" method="post" id="page_search">';
 		$_REQUEST += array('q' => '');
 		echo '<input type="search" name="q" size="15" ';
-		echo	'value="' . htmlspecialchars($_REQUEST['q']) . '" ';
+		echo	'value="' . htmlspecialchars((string)$_REQUEST['q']) . '" ';
 		echo	'class="gptext gpinput title-autocomplete" /> ';
 		echo '<input type="submit" name="cmd" value="' . $langmessage['search pages'] . '" class="gpbutton" />';
 		echo '<input type="hidden" name="menu" value="search" />';

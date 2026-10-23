@@ -218,7 +218,7 @@ namespace gp\tool{
 			if( function_exists('mb_detect_encoding') ){ 
 				foreach( $meta as $key => $value ){
 					if( !is_array($value) && !mb_detect_encoding($value, 'UTF-8', true) ){
-						$meta[$key] = utf8_encode($value);
+						$meta[$key] = mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
 					}
 				}
 			}

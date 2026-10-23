@@ -4,6 +4,8 @@ namespace gp;
 
 defined('is_running') or die('Not an entry point...');
 
+// $page and other Base objects are given properties by addons and themes
+#[\AllowDynamicProperties]
 abstract class Base{
 
 	//executable commands

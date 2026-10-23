@@ -26,8 +26,8 @@ class UploadTest extends \gptest_bootstrap{
 		];
 
 		$this->PostRequest('Admin/Uploaded/image',$params);
-		$this->assertFileNotExists($upload);
-		$this->assertFileNotExists($thumb);
+		$this->assertFileDoesNotExist($upload);
+		$this->assertFileDoesNotExist($thumb);
 	}
 
 
@@ -37,7 +37,7 @@ class UploadTest extends \gptest_bootstrap{
 		$file			= $dataDir . '/include/main.php';
 		$upload		 	= $dataDir.'/data/_uploaded/image/main.php';
 		$this->UploadRequest('Admin/Uploaded',$file);
-		$this->assertFileNotExists($upload);
+		$this->assertFileDoesNotExist($upload);
 
 	}
 

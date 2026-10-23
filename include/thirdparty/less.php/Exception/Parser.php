@@ -36,7 +36,7 @@ class Less_Exception_Parser extends Exception{
 	 * @param Less_FileInfo|string $currentFile The file
 	 * @param integer $code The exception code
 	 */
-	public function __construct($message = null, Exception $previous = null, $index = null, $currentFile = null, $code = 0){
+	public function __construct($message = null, ?Exception $previous = null, $index = null, $currentFile = null, $code = 0){
 
 		if (PHP_VERSION_ID < 50300) {
 			$this->previous = $previous;

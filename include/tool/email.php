@@ -9,7 +9,7 @@ trigger_error('Deprecated class, please use email_mailer.php instead');
 class gp_email{
 
 
-	function SendEmail( $to, $subject, $message, $headers=array(), $from_info=array() ){
+	static function SendEmail( $to, $subject, $message, $headers=array(), $from_info=array() ){
 		global $config;
 
 		trigger_error('gp_email::SendEmail() should not be used');
@@ -69,7 +69,7 @@ class gp_email{
 		return false;
 	}
 
-	function From_Address(){
+	static function From_Address(){
 		global $config;
 
 		if( !empty($config['from_address']) ){
@@ -89,7 +89,7 @@ class gp_email{
 		return 'AutomatedSender@'.$server;
 	}
 
-	function From_Name(){
+	static function From_Name(){
 		global $config;
 
 		if( !empty($config['from_name']) ){
@@ -97,7 +97,7 @@ class gp_email{
 		}
 		return 'Automated Sender';
 	}
-	function Mail_Method(){
+	static function Mail_Method(){
 		global $config;
 		if( !empty($config['mail_method']) ){
 			if( $config['mail_method'] == 'smpt' ){ //bug in 1.7
@@ -108,7 +108,7 @@ class gp_email{
 		return 'mail';
 	}
 
-	function imap_8bit(&$text){
+	static function imap_8bit(&$text){
 		if( function_exists('imap_8bit') ){
 			return imap_8bit($text);
 		}
@@ -116,7 +116,7 @@ class gp_email{
 	}
 
 
-	function quoted_printable_encode($sText,$bEmulate_imap_8bit=true) {
+	static function quoted_printable_encode($sText,$bEmulate_imap_8bit=true) {
 	  // split text into lines
 	  $aLines=explode(chr(13).chr(10),$sText);
 
@@ -124,21 +124,21 @@ class gp_email{
 		$sLine =& $aLines[$i];
 		if (strlen($sLine)===0) continue; // do nothing, if empty
 
-		$sRegExp = '/[^\x09\x20\x21-\x3C\x3E-\x7E]/e';
+		$sRegExp = '/[^\x09\x20\x21-\x3C\x3E-\x7E]/';
 
 		// imap_8bit encodes x09 everywhere, not only at lineends,
 		// for EBCDIC safeness encode !"#$@[\]^`{|}~,
 		// for complete safeness encode every character :)
 		if ($bEmulate_imap_8bit)
-		  $sRegExp = '/[^\x20\x21-\x3C\x3E-\x7E]/e';
+		  $sRegExp = '/[^\x20\x21-\x3C\x3E-\x7E]/';
 
-		$sReplmt = 'sprintf( "=%02X", ord ( "$0" ) ) ;';
-		$sLine = preg_replace( $sRegExp, $sReplmt, $sLine );
+		$sReplmt = function($m){ return sprintf('=%02X', ord($m[0])); };
+		$sLine = preg_replace_callback( $sRegExp, $sReplmt, $sLine );
 
 		// encode x09,x20 at lineends
 		{
 		  $iLength = strlen($sLine);
-		  $iLastChar = ord($sLine{$iLength-1});
+		  $iLastChar = ord($sLine[$iLength-1]);
 
 		  //              !!!!!!!!
 		  // imap_8_bit does not encode x20 at the very end of a text,
@@ -148,7 +148,7 @@ class gp_email{
 		  if (!($bEmulate_imap_8bit && ($i==count($aLines)-1)))
 
 		  if (($iLastChar==0x09)||($iLastChar==0x20)) {
-			$sLine{$iLength-1}='=';
+			$sLine[$iLength-1]='=';
 			$sLine .= ($iLastChar==0x09)?'09':'20';
 		  }
 		}    // imap_8bit encodes x20 before chr(13), too

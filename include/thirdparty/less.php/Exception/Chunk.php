@@ -25,7 +25,7 @@ class Less_Exception_Chunk extends Less_Exception_Parser{
 	 * @param Less_FileInfo|string $currentFile The file
 	 * @param integer $code The exception code
 	 */
-	public function __construct($input, Exception $previous = null, $index = null, $currentFile = null, $code = 0){
+	public function __construct($input, ?Exception $previous = null, $index = null, $currentFile = null, $code = 0){
 
 		$this->message = 'ParseError: Unexpected input'; //default message
 

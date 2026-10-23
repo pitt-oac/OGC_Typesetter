@@ -1182,7 +1182,7 @@ class Session{
 
 		if( is_object($page)
 			&& property_exists($page, 'requested')
-			&& strpos($page->requested, 'Admin/Errors') !== false
+			&& strpos((string)$page->requested, 'Admin/Errors') !== false
 			){
 			return;
 		}

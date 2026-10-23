@@ -205,7 +205,7 @@ namespace gp\tool{
 		 * @param string $type_file a string representing the type of the source file (svg, svgz)
 		 * @return bool
 		 */
-		static function CreateRectSVG($source_path, $dest_path, $width=50, $height=50, $keep_aspect_ratio){
+		static function CreateRectSVG($source_path, $dest_path, $width, $height, $keep_aspect_ratio){
 
 			$src_svg = @file_get_contents($source_path);
 			if( !$src_svg ){
@@ -221,12 +221,16 @@ namespace gp\tool{
 			*/
 
 			$internalErrors =  libxml_use_internal_errors(true);
-			$disableEntities = libxml_disable_entity_loader(true);
+			if( PHP_VERSION_ID < 80000 ){
+				$disableEntities = libxml_disable_entity_loader(true);
+			}
 			libxml_clear_errors();
 			$doc = new \DOMDocument();
 			$doc->loadXML($src_svg, LIBXML_NONET);
 			libxml_use_internal_errors($internalErrors);
-			libxml_disable_entity_loader($disableEntities);
+			if( PHP_VERSION_ID < 80000 ){
+				libxml_disable_entity_loader($disableEntities);
+			}
 			if( $error = libxml_get_last_error() ){
 				libxml_clear_errors();
 				// msg("SVG processing - LibXML Error: " . $error->message );

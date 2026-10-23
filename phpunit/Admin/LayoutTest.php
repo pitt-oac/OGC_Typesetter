@@ -6,7 +6,7 @@ class LayoutTest extends \gptest_bootstrap{
 
 	private $admin_layout;
 
-	public function setUp(){
+	public function setUp(): void{
 		parent::setUp();
 
 		$this->admin_layout = new \gp\admin\Layout([]);
