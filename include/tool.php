@@ -99,7 +99,7 @@ namespace gp{
 			$args = func_get_args();
 			$args[] = $dataDir . $dirPrefix;
 			foreach($args as $arg){
-				if( !ctype_digit($arg) ){
+				if( !ctype_digit((string)$arg) ){
 					$arg = crc32( $arg );
 					$arg = sprintf("%u\n", $arg);
 				}
@@ -700,6 +700,7 @@ namespace gp{
 		public static function SpecialHref($href){
 			global $gp_index;
 
+			$href = (string)$href;
 			$href2 = '';
 			$pos = mb_strpos($href, '/');
 			if( $pos !== false ){
@@ -730,7 +731,7 @@ namespace gp{
 			if( $ampersands ){
 				$ampersand = '&amp;';
 			}
-			$href = rawurlencode($href);
+			$href = rawurlencode((string)$href);
 			return str_replace(
 				['%26amp%3B',	'%26',		'%2F',	'%5C'],
 				[$ampersand,	$ampersand,	'/',	'\\'],
@@ -2006,7 +2007,7 @@ namespace gp{
 			$debug['lang_key']		= $lang_key;
 			$debug['phpversion']	= phpversion();
 			$debug['gpversion']		= \gpversion;
-			$debug['Rewrite']		= $_SERVER['gp_rewrite'];
+			$debug['Rewrite']		= isset($_SERVER['gp_rewrite']) ? $_SERVER['gp_rewrite'] : '';
 			$debug['Server']		= isset($_SERVER['SERVER_SOFTWARE']) ? $_SERVER['SERVER_SOFTWARE'] : '';
 
 			//create string
@@ -2180,15 +2181,15 @@ namespace gp{
 				foreach($matches as $match){
 					$len = strlen($match[0]);
 					if( $len%2 ){
-						$replacement = strftime($match[0], $time);
+						$replacement = self::Strftime($match[0], $time);
 					}else{
 						$piece = substr($match[0], -2, 2);
 						switch($piece){
 							case '%e':
-								$replacement = strftime(substr($match[0], 0, -2), $time) . ltrim(strftime('%d', $time), '0');
+								$replacement = self::Strftime(substr($match[0], 0, -2), $time) . ltrim(self::Strftime('%d', $time), '0');
 							break;
 							default:
-								$replacement = strftime($match[0], $time);
+								$replacement = self::Strftime($match[0], $time);
 							break;
 						}
 					}
@@ -2196,6 +2197,65 @@ namespace gp{
 				}
 			}
 			return $format;
+		}
+
+
+		/**
+		 * Replacement for php's strftime() (deprecated as of php 8.1) using date()
+		 * Output matches strftime() in the default "C" locale
+		 *
+		 */
+		private static function Strftime($format, $time){
+
+			return preg_replace_callback('#%(.)#s', function($match) use ($time){
+				$day_of_year	= (int)date('z', $time);
+				$day_of_week	= (int)date('w', $time);
+
+				switch($match[1]){
+					case 'a':	return date('D', $time);
+					case 'A':	return date('l', $time);
+					case 'd':	return date('d', $time);
+					case 'e':	return sprintf('%2d', date('j', $time));
+					case 'j':	return sprintf('%03d', $day_of_year + 1);
+					case 'u':	return date('N', $time);
+					case 'w':	return (string)$day_of_week;
+					case 'U':	return sprintf('%02d', floor(($day_of_year + 7 - $day_of_week) / 7));
+					case 'V':	return date('W', $time);
+					case 'W':	return sprintf('%02d', floor(($day_of_year + 7 - (($day_of_week + 6) % 7)) / 7));
+					case 'b':
+					case 'h':	return date('M', $time);
+					case 'B':	return date('F', $time);
+					case 'm':	return date('m', $time);
+					case 'C':	return sprintf('%02d', floor(date('Y', $time) / 100));
+					case 'g':	return substr(date('o', $time), -2);
+					case 'G':	return date('o', $time);
+					case 'y':	return date('y', $time);
+					case 'Y':	return date('Y', $time);
+					case 'H':	return date('H', $time);
+					case 'k':	return sprintf('%2d', date('G', $time));
+					case 'I':	return date('h', $time);
+					case 'l':	return sprintf('%2d', date('g', $time));
+					case 'M':	return date('i', $time);
+					case 'p':	return date('A', $time);
+					case 'P':	return date('a', $time);
+					case 'r':	return date('h:i:s A', $time);
+					case 'R':	return date('H:i', $time);
+					case 'S':	return date('s', $time);
+					case 'T':
+					case 'X':	return date('H:i:s', $time);
+					case 'z':	return date('O', $time);
+					case 'Z':	return date('T', $time);
+					case 'c':	return date('D M ', $time) . sprintf('%2d', date('j', $time)) . date(' H:i:s Y', $time);
+					case 'D':
+					case 'x':	return date('m/d/y', $time);
+					case 'F':	return date('Y-m-d', $time);
+					case 's':	return date('U', $time);
+					case 'n':	return "\n";
+					case 't':	return "\t";
+					case '%':	return '%';
+				}
+				return $match[0];
+			}, $format);
 		}
 
 

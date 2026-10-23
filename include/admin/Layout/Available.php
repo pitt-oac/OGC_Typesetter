@@ -355,17 +355,17 @@ class Available extends \gp\admin\Layout{
 
 
 	public function SortDownloads($a, $b){
-		return $b['dn'] > $a['dn'];
+		return $b['dn'] <=> $a['dn'];
 	}
 
 
 	public function SortRating($a, $b){
-		return $b['rt'] > $a['rt'];
+		return $b['rt'] <=> $a['rt'];
 	}
 
 
 	public function SortUpdated($a, $b){
-		return $b['tm'] > $a['tm'];
+		return $b['tm'] <=> $a['tm'];
 	}
 
 

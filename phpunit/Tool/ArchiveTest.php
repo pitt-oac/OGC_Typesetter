@@ -31,7 +31,7 @@ class phpunit_Archive extends gptest_bootstrap{
 	 * Create the files and folders
 	 *
 	 */
-	function setUp(){
+	function setUp(): void{
 		global $dataDir;
 
 		// HHVM doesn't support writing with PHAR

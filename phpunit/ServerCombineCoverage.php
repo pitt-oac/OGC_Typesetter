@@ -5,9 +5,13 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 if( class_exists('\SebastianBergmann\CodeCoverage\CodeCoverage') ){
 
 	$include_dir	= dirname(__DIR__).'/include';
-	$cov_obj		= new \SebastianBergmann\CodeCoverage\CodeCoverage();
-	$cov_obj->filter()->addDirectoryToWhitelist($include_dir);
-	$cov_obj->filter()->removeDirectoryFromWhitelist($include_dir.'/thirdparty');
+	$filter			= new \SebastianBergmann\CodeCoverage\Filter();
+	$filter->includeDirectory($include_dir);
+	$filter->excludeDirectory($include_dir.'/thirdparty');
+
+	// requires xdebug or pcov
+	$driver			= (new \SebastianBergmann\CodeCoverage\Driver\Selector)->forLineCoverage($filter);
+	$cov_obj		= new \SebastianBergmann\CodeCoverage\CodeCoverage($driver, $filter);
 
 
 	$cov_dir		= dirname(__DIR__).'/x_coverage';
@@ -29,7 +33,7 @@ if( class_exists('\SebastianBergmann\CodeCoverage\CodeCoverage') ){
 
 		$file	= $cov_dir.'/'.$file;
 		$data	= json_decode( file_get_contents($file),true );
-		$cov_obj->append($data, $file );
+		$cov_obj->append(\SebastianBergmann\CodeCoverage\RawCodeCoverageData::fromXdebugWithoutPathCoverage($data), $file);
 		$file_count++;
 	}
 

@@ -1,21 +1,14 @@
 <?php
 
-if( !class_exists('\PHPUnit_Framework_BaseTestListener') ){
-	if( class_exists('\PHPUnit\Framework\TestListener') ){
-    	class_alias('\PHPUnit\Framework\TestListener', '\PHPUnit_Framework_BaseTestListener');
-	}else{
-		throw new \Exception('\PHPUnit\Framework\TestListener class doesnt exist');
-	}
-}
+class ServerSetup implements \PHPUnit\Framework\TestListener{
 
+	use \PHPUnit\Framework\TestListenerDefaultImplementation;
 
-class ServerSetup extends PHPUnit_Framework_BaseTestListener{
-
-    public function startTestSuite($suite){
+	public function startTestSuite(\PHPUnit\Framework\TestSuite $suite): void{
 		echo pre('start test suite');
-    }
+	}
 
-    public function endTestSuite($suite){
+	public function endTestSuite(\PHPUnit\Framework\TestSuite $suite): void{
 		echo pre('end test suite');
-    }
+	}
 }

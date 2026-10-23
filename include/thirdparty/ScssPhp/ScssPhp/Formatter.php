@@ -260,7 +260,7 @@ abstract class Formatter
      *
      * @return string
      */
-    public function format(OutputBlock $block, SourceMapGenerator $sourceMapGenerator = null)
+    public function format(OutputBlock $block, ?SourceMapGenerator $sourceMapGenerator = null)
     {
         $this->sourceMapGenerator = null;
 

@@ -35,12 +35,12 @@ class cssmin
 		$v = trim($v);
 		$v = str_replace("\r\n", "\n", $v);
         $search = array("/\/\*[\d\D]*?\*\/|\t+/", "/\s+/", "/\}\s+/");
-        $replace = array(null, " ", "}\n");
+        $replace = array("", " ", "}\n");
 		$v = preg_replace($search, $replace, $v);
 		$search = array("/\\;\s/", "/\s*\{\\s*/", "/\\:\s+\\#/", "/,\s+/i", "/\\:\s+\\\'/i", "/\\:\s+([0-9A-Z\-]+)/i");
         $replace = array(";", "{", ":#", ",", ":\'", ":$1");
         $v = preg_replace($search, $replace, $v);
-        $v = str_replace("\n", null, $v);
+        $v = str_replace("\n", "", $v);
     	return $v;
   		}
 	}
